@@ -43,7 +43,7 @@ public class Main {
         } else {
             System.out.println("Cell phone number incorrectly formatted or does not contain international code.");
         }
-
+        System.out.println("\n=== Registration Result ===");
         System.out.println(login.registerUser());
 
         // Only allow login if registration is valid

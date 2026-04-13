@@ -1,10 +1,14 @@
+// This class handles all user details and validation
 public class Login {
+
+    // User details
     private String firstName;
     private String lastName;
     private String userName;
     private String password;
     private String cellPhoneNumber;
 
+    // Constructor to store user info
     public Login(String firstName, String lastName, String userName, String password, String cellPhoneNumber) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -13,10 +17,12 @@ public class Login {
         this.cellPhoneNumber = cellPhoneNumber;
     }
 
+    // Checks if username has "_" and is not longer than 5 characters
     public boolean checkUserName() {
         return userName.contains("_") && userName.length() <= 5;
     }
 
+    // Checks password rules (length, capital, number, special char)
     public boolean checkPasswordComplexity() {
         boolean hasCapitalLetter = false;
         boolean hasNumber = false;
@@ -26,6 +32,7 @@ public class Login {
             return false;
         }
 
+        // Loop through each character in password
         for (int i = 0; i < password.length(); i++) {
             char ch = password.charAt(i);
 
@@ -41,10 +48,12 @@ public class Login {
         return hasCapitalLetter && hasNumber && hasSpecialCharacter;
     }
 
+    // Checks if number starts with +27 and has correct length
     public boolean checkCellPhoneNumber() {
         return cellPhoneNumber.matches("^\\+27\\d{9}$");
     }
 
+    // Handles full registration validation
     public String registerUser() {
         if (!checkUserName()) {
             return "Username is not correctly formatted; please ensure that your username contains an underscore and is no more than five characters in length.";
@@ -61,23 +70,17 @@ public class Login {
         return "User has been registered successfully.";
     }
 
+    // Compares entered login details with stored ones
     public boolean loginUser(String enteredUserName, String enteredPassword) {
         return userName.equals(enteredUserName) && password.equals(enteredPassword);
     }
 
+    // Returns login message based on success/failure
     public String returnLoginStatus(boolean loginSuccess) {
         if (loginSuccess) {
             return "Welcome " + firstName + ", " + lastName + " it is great to see you again.";
         } else {
             return "Username or password incorrect, please try again.";
         }
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
     }
 }

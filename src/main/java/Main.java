@@ -74,7 +74,11 @@ public class Main {
                 String enteredPassword = input.nextLine();
 
                 boolean loginSuccess = registeredUser.loginUser(enteredUserName, enteredPassword);
-                System.out.println(registeredUser.returnLoginStatus(loginSuccess));
+             System.out.println(registeredUser.returnLoginStatus(loginSuccess));
+
+              if (loginSuccess) {
+              showQuickChatMenu(input);
+}
             }
 
         } 
@@ -95,4 +99,29 @@ public class Main {
 
         input.close();
     }
+
+    // This menu is shown only after a user has logged in successfully
+public static void showQuickChatMenu(Scanner input) {
+    String menuChoice = "";
+
+    while (!menuChoice.equals("3")) {
+        System.out.println("\nWelcome to QuickChat.");
+        System.out.println("1. Send Messages");
+        System.out.println("2. Show recently sent messages");
+        System.out.println("3. Quit");
+        System.out.print("Choose an option: ");
+
+        menuChoice = input.nextLine().trim();
+
+        if (menuChoice.equals("1")) {
+            System.out.println("Send Messages selected.");
+        } else if (menuChoice.equals("2")) {
+            System.out.println("Coming Soon.");
+        } else if (menuChoice.equals("3")) {
+            System.out.println("Goodbye.");
+        } else {
+            System.out.println("Invalid option selected.");
+        }
+    }
+}
 }

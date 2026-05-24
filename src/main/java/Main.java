@@ -4,7 +4,7 @@ public class Main {
     public static void main(String[] args) {
 
         Scanner input = new Scanner(System.in);
-        Login registeredUser = null; // Will store user after registration
+        Login registeredUser = null; // Stores user after successful registration
 
         // Menu shown when program starts
         System.out.println("Welcome to QuickChat");
@@ -74,14 +74,14 @@ public class Main {
                 String enteredPassword = input.nextLine();
 
                 boolean loginSuccess = registeredUser.loginUser(enteredUserName, enteredPassword);
-             System.out.println(registeredUser.returnLoginStatus(loginSuccess));
+                System.out.println(registeredUser.returnLoginStatus(loginSuccess));
 
-              if (loginSuccess) {
-              showQuickChatMenu(input);
-}
+                if (loginSuccess) {
+                    showQuickChatMenu(input);
+                }
             }
 
-        } 
+        }
         // If user chooses login first
         else if (choice.equals("2") || choice.equalsIgnoreCase("Login")) {
 
@@ -91,7 +91,8 @@ public class Main {
             if (registeredUser == null) {
                 System.out.println("No user is registered yet. Please register first.");
             }
-        } 
+
+        }
         // Invalid input
         else {
             System.out.println("Invalid option selected.");
@@ -101,27 +102,52 @@ public class Main {
     }
 
     // This menu is shown only after a user has logged in successfully
-public static void showQuickChatMenu(Scanner input) {
-    String menuChoice = "";
+    public static void showQuickChatMenu(Scanner input) {
+        String menuChoice = "";
 
-    while (!menuChoice.equals("3")) {
-        System.out.println("\nWelcome to QuickChat.");
-        System.out.println("1. Send Messages");
-        System.out.println("2. Show recently sent messages");
-        System.out.println("3. Quit");
-        System.out.print("Choose an option: ");
+        while (!menuChoice.equals("3")) {
+            System.out.println("\nWelcome to QuickChat.");
+            System.out.println("1. Send Messages");
+            System.out.println("2. Show recently sent messages");
+            System.out.println("3. Quit");
+            System.out.print("Choose an option: ");
 
-        menuChoice = input.nextLine().trim();
+            menuChoice = input.nextLine().trim();
 
-        if (menuChoice.equals("1")) {
-            System.out.println("Send Messages selected.");
-        } else if (menuChoice.equals("2")) {
-            System.out.println("Coming Soon.");
-        } else if (menuChoice.equals("3")) {
-            System.out.println("Goodbye.");
-        } else {
-            System.out.println("Invalid option selected.");
+            if (menuChoice.equals("1")) {
+
+                System.out.print("How many messages would you like to send? ");
+                int totalMessages = Integer.parseInt(input.nextLine());
+
+                for (int i = 1; i <= totalMessages; i++) {
+
+                    System.out.println("\nMessage " + i);
+
+                    System.out.print("Enter recipient number: ");
+                    String recipient = input.nextLine();
+
+                    System.out.print("Enter your message: ");
+                    String messageText = input.nextLine();
+
+                    // Create message object
+                    Message message = new Message(i, recipient, messageText);
+
+                    // Display validations
+                    System.out.println(message.checkRecipientCell());
+                    System.out.println(message.validateMessageLength());
+
+                    // Display generated values
+                    System.out.println("Message ID: " + message.getMessageID());
+                    System.out.println("Message Hash: " + message.createMessageHash());
+                }
+
+            } else if (menuChoice.equals("2")) {
+                System.out.println("Coming Soon.");
+            } else if (menuChoice.equals("3")) {
+                System.out.println("Goodbye.");
+            } else {
+                System.out.println("Invalid option selected.");
+            }
         }
     }
-}
 }

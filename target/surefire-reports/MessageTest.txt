@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
-Test set: LoginTest
+Test set: MessageTest
 -------------------------------------------------------------------------------
-Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.106 s -- in LoginTest
+Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.047 s -- in MessageTest

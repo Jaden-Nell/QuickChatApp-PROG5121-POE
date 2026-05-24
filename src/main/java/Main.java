@@ -139,6 +139,20 @@ public class Main {
                     // Display generated values
                     System.out.println("Message ID: " + message.getMessageID());
                     System.out.println("Message Hash: " + message.createMessageHash());
+
+                    System.out.println("\nWhat would you like to do with this message?");
+                    System.out.println("1. Send Message");
+                    System.out.println("2. Disregard Message");
+                    System.out.println("3. Store Message");
+                    System.out.print("Choose an option: ");
+
+                    String sendChoice = input.nextLine().trim();
+
+                    System.out.println(message.sentMessage(sendChoice));
+
+                    if (sendChoice.equals("1") || sendChoice.equalsIgnoreCase("Send Message")) {
+                        System.out.println("\n" + message.printMessageDetails());
+                    }
                 }
 
             } else if (menuChoice.equals("2")) {

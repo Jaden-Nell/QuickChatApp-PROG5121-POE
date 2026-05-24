@@ -1,4 +1,6 @@
 import java.util.Random;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Message {
 
@@ -54,34 +56,53 @@ public class Message {
 
     // Creates the message hash using ID, message number, first word and last word
     public String createMessageHash() {
-    String[] words = message.trim().split("\\s+");
+        String[] words = message.trim().split("\\s+");
 
-    String firstWord = words[0];
-    String lastWord = words[words.length - 1];
+        String firstWord = words[0];
+        String lastWord = words[words.length - 1];
 
-    return (messageID.substring(0, 2) + ":" + messageNumber + ":" + firstWord + lastWord).toUpperCase();
-}
+        return (messageID.substring(0, 2) + ":" + messageNumber + ":" + firstWord + lastWord).toUpperCase();
+    }
 
     // Returns the correct message depending on the user's send choice
     public String sentMessage(String choice) {
-    if (choice.equalsIgnoreCase("Send Message") || choice.equals("1")) {
-        return "Message successfully sent.";
-    } else if (choice.equalsIgnoreCase("Disregard Message") || choice.equals("2")) {
-        return "Press 0 to delete the message.";
-    } else if (choice.equalsIgnoreCase("Store Message") || choice.equals("3")) {
-        return "Message successfully stored.";
-    } else {
-        return "Invalid option selected.";
+        if (choice.equalsIgnoreCase("Send Message") || choice.equals("1")) {
+            return "Message successfully sent.";
+        } else if (choice.equalsIgnoreCase("Disregard Message") || choice.equals("2")) {
+            return "Press 0 to delete the message.";
+        } else if (choice.equalsIgnoreCase("Store Message") || choice.equals("3")) {
+            return "Message successfully stored.";
+        } else {
+            return "Invalid option selected.";
+        }
     }
-}
 
     // Returns message details in the required display order
     public String printMessageDetails() {
-    return "Message ID: " + messageID
-            + "\nMessage Hash: " + createMessageHash()
-            + "\nRecipient: " + recipient
-            + "\nMessage: " + message;
-}
+        return "Message ID: " + messageID
+                + "\nMessage Hash: " + createMessageHash()
+                + "\nRecipient: " + recipient
+                + "\nMessage: " + message;
+    }
+
+    // Stores message details in a JSON file
+    public void storeMessage() {
+        try {
+            FileWriter writer = new FileWriter("stored_messages.json", true);
+
+            writer.write("{\n");
+            writer.write("  \"MessageID\": \"" + messageID + "\",\n");
+            writer.write("  \"MessageHash\": \"" + createMessageHash() + "\",\n");
+            writer.write("  \"Recipient\": \"" + recipient + "\",\n");
+            writer.write("  \"Message\": \"" + message + "\"\n");
+            writer.write("}\n\n");
+
+            writer.close();
+
+        } catch (IOException e) {
+            System.out.println("An error occurred while storing the message.");
+        }
+    }
 
     // Getter methods
     public String getMessageID() {

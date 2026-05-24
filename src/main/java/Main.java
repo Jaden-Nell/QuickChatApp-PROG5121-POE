@@ -106,6 +106,7 @@ public class Main {
         String menuChoice = "";
 
         while (!menuChoice.equals("3")) {
+
             System.out.println("\nWelcome to QuickChat.");
             System.out.println("1. Send Messages");
             System.out.println("2. Show recently sent messages");
@@ -118,6 +119,7 @@ public class Main {
 
                 System.out.print("How many messages would you like to send? ");
                 int totalMessages = Integer.parseInt(input.nextLine());
+
                 int sentMessageCount = 0;
 
                 for (int i = 1; i <= totalMessages; i++) {
@@ -151,19 +153,34 @@ public class Main {
 
                     System.out.println(message.sentMessage(sendChoice));
 
+                    // Send message
                     if (sendChoice.equals("1") || sendChoice.equalsIgnoreCase("Send Message")) {
+
                         sentMessageCount++;
+
                         System.out.println("\n" + message.printMessageDetails());
+
+                    }
+                    // Store message in JSON
+                    else if (sendChoice.equals("3") || sendChoice.equalsIgnoreCase("Store Message")) {
+
+                        message.storeMessage();
+
                     }
                 }
 
                 System.out.println("\nTotal messages sent: " + sentMessageCount);
 
             } else if (menuChoice.equals("2")) {
+
                 System.out.println("Coming Soon.");
+
             } else if (menuChoice.equals("3")) {
+
                 System.out.println("Goodbye.");
+
             } else {
+
                 System.out.println("Invalid option selected.");
             }
         }

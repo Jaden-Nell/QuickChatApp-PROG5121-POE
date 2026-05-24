@@ -118,6 +118,7 @@ public class Main {
 
                 System.out.print("How many messages would you like to send? ");
                 int totalMessages = Integer.parseInt(input.nextLine());
+                int sentMessageCount = 0;
 
                 for (int i = 1; i <= totalMessages; i++) {
 
@@ -151,9 +152,12 @@ public class Main {
                     System.out.println(message.sentMessage(sendChoice));
 
                     if (sendChoice.equals("1") || sendChoice.equalsIgnoreCase("Send Message")) {
+                        sentMessageCount++;
                         System.out.println("\n" + message.printMessageDetails());
                     }
                 }
+
+                System.out.println("\nTotal messages sent: " + sentMessageCount);
 
             } else if (menuChoice.equals("2")) {
                 System.out.println("Coming Soon.");

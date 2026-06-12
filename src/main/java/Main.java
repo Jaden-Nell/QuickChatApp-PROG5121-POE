@@ -3,10 +3,11 @@ import java.util.ArrayList;
 
 public class Main {
 
-    // Collections used for Part 3
     private static ArrayList<Message> sentMessages = new ArrayList<>();
     private static ArrayList<Message> storedMessages = new ArrayList<>();
     private static ArrayList<Message> disregardedMessages = new ArrayList<>();
+    private static ArrayList<String> messageHashes = new ArrayList<>();
+    private static ArrayList<String> messageIDs = new ArrayList<>();
 
     public static void main(String[] args) {
 
@@ -115,7 +116,6 @@ public class Main {
 
                 System.out.print("How many messages would you like to send? ");
                 int totalMessages = Integer.parseInt(input.nextLine());
-
                 int sentMessageCount = 0;
 
                 for (int i = 1; i <= totalMessages; i++) {
@@ -129,6 +129,9 @@ public class Main {
                     String messageText = input.nextLine();
 
                     Message message = new Message(i, recipient, messageText);
+
+                    messageIDs.add(message.getMessageID());
+                    messageHashes.add(message.createMessageHash());
 
                     System.out.println(message.checkRecipientCell());
                     System.out.println(message.validateMessageLength());
@@ -147,18 +150,14 @@ public class Main {
                     System.out.println(message.sentMessage(sendChoice));
 
                     if (sendChoice.equals("1") || sendChoice.equalsIgnoreCase("Send Message")) {
-
                         sentMessages.add(message);
                         sentMessageCount++;
-
                         System.out.println("\n" + message.printMessageDetails());
 
                     } else if (sendChoice.equals("2") || sendChoice.equalsIgnoreCase("Disregard Message")) {
-
                         disregardedMessages.add(message);
 
                     } else if (sendChoice.equals("3") || sendChoice.equalsIgnoreCase("Store Message")) {
-
                         storedMessages.add(message);
                         message.storeMessage();
                     }
@@ -168,20 +167,7 @@ public class Main {
 
             } else if (menuChoice.equals("2")) {
 
-                if (sentMessages.isEmpty()) {
-
-                    System.out.println("No messages have been sent yet.");
-
-                } else {
-
-                    System.out.println("\n=== Sent Messages ===");
-
-                    for (Message message : sentMessages) {
-
-                        System.out.println(message.printMessageDetails());
-                        System.out.println("----------------------------------");
-                    }
-                }
+                System.out.println(displaySentMessages());
 
             } else if (menuChoice.equals("3")) {
 
@@ -215,22 +201,169 @@ public class Main {
             storedChoice = input.nextLine().trim();
 
             if (storedChoice.equals("1")) {
-                System.out.println("Stored message sender and recipient feature coming next.");
+                System.out.println(displayStoredSendersAndRecipients());
+
             } else if (storedChoice.equals("2")) {
-                System.out.println("Longest stored message feature coming next.");
+                System.out.println(displayLongestStoredMessage());
+
             } else if (storedChoice.equals("3")) {
-                System.out.println("Search by Message ID feature coming next.");
+                System.out.print("Enter Message ID: ");
+                String id = input.nextLine();
+                System.out.println(searchByMessageID(id));
+
             } else if (storedChoice.equals("4")) {
-                System.out.println("Search by recipient feature coming next.");
+                System.out.print("Enter recipient number: ");
+                String recipient = input.nextLine();
+                System.out.println(searchByRecipient(recipient));
+
             } else if (storedChoice.equals("5")) {
-                System.out.println("Delete by message hash feature coming next.");
+                System.out.print("Enter message hash: ");
+                String hash = input.nextLine();
+                System.out.println(deleteByMessageHash(hash));
+
             } else if (storedChoice.equals("6")) {
-                System.out.println("Full report feature coming next.");
+                System.out.println(displayReport());
+
             } else if (storedChoice.equals("7")) {
                 System.out.println("Returning to QuickChat menu.");
+
             } else {
                 System.out.println("Invalid option selected.");
             }
+        }
+    }
+
+    public static String displaySentMessages() {
+        if (sentMessages.isEmpty()) {
+            return "No messages have been sent yet.";
+        }
+
+        StringBuilder output = new StringBuilder("\n=== Sent Messages ===\n");
+
+        for (Message message : sentMessages) {
+            output.append(message.printMessageDetails()).append("\n");
+            output.append("----------------------------------\n");
+        }
+
+        return output.toString();
+    }
+
+    public static String displayStoredSendersAndRecipients() {
+        if (storedMessages.isEmpty()) {
+            return "No stored messages found.";
+        }
+
+        StringBuilder output = new StringBuilder("\n=== Stored Message Senders and Recipients ===\n");
+
+        for (Message message : storedMessages) {
+            output.append("Sender: User\n");
+            output.append("Recipient: ").append(message.getRecipient()).append("\n");
+            output.append("----------------------------------\n");
+        }
+
+        return output.toString();
+    }
+
+    public static String displayLongestStoredMessage() {
+        if (storedMessages.isEmpty()) {
+            return "No stored messages found.";
+        }
+
+        Message longestMessage = storedMessages.get(0);
+
+        for (Message message : storedMessages) {
+            if (message.getMessage().length() > longestMessage.getMessage().length()) {
+                longestMessage = message;
+            }
+        }
+
+        return longestMessage.getMessage();
+    }
+
+    public static String searchByMessageID(String messageID) {
+        ArrayList<Message> allMessages = new ArrayList<>();
+        allMessages.addAll(sentMessages);
+        allMessages.addAll(storedMessages);
+        allMessages.addAll(disregardedMessages);
+
+        for (Message message : allMessages) {
+            if (message.getMessageID().equals(messageID)) {
+                return "Recipient: " + message.getRecipient()
+                        + "\nMessage: " + message.getMessage();
+            }
+        }
+
+        return "Message ID not found.";
+    }
+
+    public static String searchByRecipient(String recipient) {
+        ArrayList<Message> allMessages = new ArrayList<>();
+        allMessages.addAll(sentMessages);
+        allMessages.addAll(storedMessages);
+
+        StringBuilder output = new StringBuilder();
+
+        for (Message message : allMessages) {
+            if (message.getRecipient().equals(recipient)) {
+                output.append(message.getMessage()).append("\n");
+            }
+        }
+
+        if (output.length() == 0) {
+            return "No messages found for this recipient.";
+        }
+
+        return output.toString();
+    }
+
+    public static String deleteByMessageHash(String hash) {
+        for (int i = 0; i < storedMessages.size(); i++) {
+            Message message = storedMessages.get(i);
+
+            if (message.createMessageHash().equals(hash)) {
+                storedMessages.remove(i);
+                return "Message: \"" + message.getMessage() + "\" successfully deleted.";
+            }
+        }
+
+        return "Message hash not found.";
+    }
+
+    public static String displayReport() {
+        if (sentMessages.isEmpty()) {
+            return "No sent messages to report.";
+        }
+
+        StringBuilder report = new StringBuilder("\n=== Sent Messages Report ===\n");
+
+        for (Message message : sentMessages) {
+            report.append("Message Hash: ").append(message.createMessageHash()).append("\n");
+            report.append("Recipient: ").append(message.getRecipient()).append("\n");
+            report.append("Message: ").append(message.getMessage()).append("\n");
+            report.append("----------------------------------\n");
+        }
+
+        return report.toString();
+    }
+
+    public static void clearCollectionsForTesting() {
+        sentMessages.clear();
+        storedMessages.clear();
+        disregardedMessages.clear();
+        messageHashes.clear();
+        messageIDs.clear();
+    }
+
+    public static void addMessageForTesting(Message message, String flag) {
+        messageIDs.add(message.getMessageID());
+        messageHashes.add(message.createMessageHash());
+
+        if (flag.equalsIgnoreCase("Sent")) {
+            sentMessages.add(message);
+        } else if (flag.equalsIgnoreCase("Stored")) {
+            storedMessages.add(message);
+        } else if (flag.equalsIgnoreCase("Disregard")) {
+            disregardedMessages.add(message);
         }
     }
 }

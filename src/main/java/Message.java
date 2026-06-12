@@ -4,13 +4,11 @@ import java.io.IOException;
 
 public class Message {
 
-    // Message details
     private String messageID;
     private int messageNumber;
     private String recipient;
     private String message;
 
-    // Constructor
     public Message(int messageNumber, String recipient, String message) {
         this.messageID = generateMessageID();
         this.messageNumber = messageNumber;
@@ -18,7 +16,13 @@ public class Message {
         this.message = message;
     }
 
-    // Generates a random 10-digit message ID
+    public Message(String messageID, int messageNumber, String recipient, String message) {
+        this.messageID = messageID;
+        this.messageNumber = messageNumber;
+        this.recipient = recipient;
+        this.message = message;
+    }
+
     private String generateMessageID() {
         Random random = new Random();
         StringBuilder id = new StringBuilder();
@@ -30,12 +34,10 @@ public class Message {
         return id.toString();
     }
 
-    // Checks that message ID is not more than 10 characters
     public boolean checkMessageID() {
         return messageID.length() <= 10;
     }
 
-    // Checks if recipient number starts with +27 and has the correct format
     public String checkRecipientCell() {
         if (recipient.matches("^\\+27\\d{9}$")) {
             return "Cell phone number successfully captured.";
@@ -44,7 +46,6 @@ public class Message {
         }
     }
 
-    // Checks if the message is 250 characters or less
     public String validateMessageLength() {
         if (message.length() <= 250) {
             return "Message ready to send.";
@@ -54,7 +55,6 @@ public class Message {
         }
     }
 
-    // Creates the message hash using ID, message number, first word and last word
     public String createMessageHash() {
         String[] words = message.trim().split("\\s+");
 
@@ -64,7 +64,6 @@ public class Message {
         return (messageID.substring(0, 2) + ":" + messageNumber + ":" + firstWord + lastWord).toUpperCase();
     }
 
-    // Returns the correct message depending on the user's send choice
     public String sentMessage(String choice) {
         if (choice.equalsIgnoreCase("Send Message") || choice.equals("1")) {
             return "Message successfully sent.";
@@ -77,7 +76,6 @@ public class Message {
         }
     }
 
-    // Returns message details in the required display order
     public String printMessageDetails() {
         return "Message ID: " + messageID
                 + "\nMessage Hash: " + createMessageHash()
@@ -85,7 +83,6 @@ public class Message {
                 + "\nMessage: " + message;
     }
 
-    // Stores message details in a JSON file
     public void storeMessage() {
         try {
             FileWriter writer = new FileWriter("stored_messages.json", true);
@@ -94,7 +91,7 @@ public class Message {
             writer.write("  \"MessageID\": \"" + messageID + "\",\n");
             writer.write("  \"MessageHash\": \"" + createMessageHash() + "\",\n");
             writer.write("  \"Recipient\": \"" + recipient + "\",\n");
-            writer.write("  \"Message\": \"" + message + "\"\n");
+            writer.write("  \"Message\": \"" + message.replace("\"", "\\\"") + "\"\n");
             writer.write("}\n\n");
 
             writer.close();
@@ -104,7 +101,6 @@ public class Message {
         }
     }
 
-    // Getter methods
     public String getMessageID() {
         return messageID;
     }

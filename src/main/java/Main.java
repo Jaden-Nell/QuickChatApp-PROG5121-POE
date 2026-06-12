@@ -100,12 +100,13 @@ public class Main {
     public static void showQuickChatMenu(Scanner input) {
         String menuChoice = "";
 
-        while (!menuChoice.equals("3")) {
+        while (!menuChoice.equals("4")) {
 
             System.out.println("\nWelcome to QuickChat.");
             System.out.println("1. Send Messages");
             System.out.println("2. Show recently sent messages");
-            System.out.println("3. Quit");
+            System.out.println("3. Stored Messages");
+            System.out.println("4. Quit");
             System.out.print("Choose an option: ");
 
             menuChoice = input.nextLine().trim();
@@ -184,10 +185,50 @@ public class Main {
 
             } else if (menuChoice.equals("3")) {
 
+                showStoredMessagesMenu(input);
+
+            } else if (menuChoice.equals("4")) {
+
                 System.out.println("Goodbye.");
 
             } else {
 
+                System.out.println("Invalid option selected.");
+            }
+        }
+    }
+
+    public static void showStoredMessagesMenu(Scanner input) {
+        String storedChoice = "";
+
+        while (!storedChoice.equals("7")) {
+            System.out.println("\n=== Stored Messages Menu ===");
+            System.out.println("1. Display sender and recipient of stored messages");
+            System.out.println("2. Display longest stored message");
+            System.out.println("3. Search by Message ID");
+            System.out.println("4. Search by recipient");
+            System.out.println("5. Delete by message hash");
+            System.out.println("6. Display full report");
+            System.out.println("7. Back to QuickChat menu");
+            System.out.print("Choose an option: ");
+
+            storedChoice = input.nextLine().trim();
+
+            if (storedChoice.equals("1")) {
+                System.out.println("Stored message sender and recipient feature coming next.");
+            } else if (storedChoice.equals("2")) {
+                System.out.println("Longest stored message feature coming next.");
+            } else if (storedChoice.equals("3")) {
+                System.out.println("Search by Message ID feature coming next.");
+            } else if (storedChoice.equals("4")) {
+                System.out.println("Search by recipient feature coming next.");
+            } else if (storedChoice.equals("5")) {
+                System.out.println("Delete by message hash feature coming next.");
+            } else if (storedChoice.equals("6")) {
+                System.out.println("Full report feature coming next.");
+            } else if (storedChoice.equals("7")) {
+                System.out.println("Returning to QuickChat menu.");
+            } else {
                 System.out.println("Invalid option selected.");
             }
         }

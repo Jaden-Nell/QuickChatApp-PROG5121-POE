@@ -1,12 +1,18 @@
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class Main {
+
+    // Collections used for Part 3
+    private static ArrayList<Message> sentMessages = new ArrayList<>();
+    private static ArrayList<Message> storedMessages = new ArrayList<>();
+    private static ArrayList<Message> disregardedMessages = new ArrayList<>();
+
     public static void main(String[] args) {
 
         Scanner input = new Scanner(System.in);
         Login registeredUser = null; // Stores user after successful registration
 
-        // Menu shown when program starts
         System.out.println("Welcome to QuickChat");
         System.out.println("1. Register");
         System.out.println("2. Login");
@@ -14,7 +20,6 @@ public class Main {
 
         String choice = input.nextLine().trim();
 
-        // If user chooses register
         if (choice.equals("1") || choice.equalsIgnoreCase("Register")) {
 
             System.out.println("\n=== Registration ===");
@@ -34,10 +39,8 @@ public class Main {
             System.out.print("Enter your cell phone number (with international code): ");
             String cellPhoneNumber = input.nextLine();
 
-            // Create Login object
             registeredUser = new Login(firstName, lastName, userName, password, cellPhoneNumber);
 
-            // Run validation checks
             if (registeredUser.checkUserName()) {
                 System.out.println("Username successfully captured.");
             } else {
@@ -56,11 +59,9 @@ public class Main {
                 System.out.println("Cell phone number incorrectly formatted.");
             }
 
-            // Show final registration result
             System.out.println("\n=== Registration Result ===");
             System.out.println(registeredUser.registerUser());
 
-            // Allow login after successful registration
             if (registeredUser.checkUserName()
                     && registeredUser.checkPasswordComplexity()
                     && registeredUser.checkCellPhoneNumber()) {
@@ -81,27 +82,21 @@ public class Main {
                 }
             }
 
-        }
-        // If user chooses login first
-        else if (choice.equals("2") || choice.equalsIgnoreCase("Login")) {
+        } else if (choice.equals("2") || choice.equalsIgnoreCase("Login")) {
 
             System.out.println("\n=== Login ===");
 
-            // No user stored yet
             if (registeredUser == null) {
                 System.out.println("No user is registered yet. Please register first.");
             }
 
-        }
-        // Invalid input
-        else {
+        } else {
             System.out.println("Invalid option selected.");
         }
 
         input.close();
     }
 
-    // This menu is shown only after a user has logged in successfully
     public static void showQuickChatMenu(Scanner input) {
         String menuChoice = "";
 
@@ -132,14 +127,11 @@ public class Main {
                     System.out.print("Enter your message: ");
                     String messageText = input.nextLine();
 
-                    // Create message object
                     Message message = new Message(i, recipient, messageText);
 
-                    // Display validations
                     System.out.println(message.checkRecipientCell());
                     System.out.println(message.validateMessageLength());
 
-                    // Display generated values
                     System.out.println("Message ID: " + message.getMessageID());
                     System.out.println("Message Hash: " + message.createMessageHash());
 
@@ -153,19 +145,21 @@ public class Main {
 
                     System.out.println(message.sentMessage(sendChoice));
 
-                    // Send message
                     if (sendChoice.equals("1") || sendChoice.equalsIgnoreCase("Send Message")) {
 
+                        sentMessages.add(message);
                         sentMessageCount++;
 
                         System.out.println("\n" + message.printMessageDetails());
 
-                    }
-                    // Store message in JSON
-                    else if (sendChoice.equals("3") || sendChoice.equalsIgnoreCase("Store Message")) {
+                    } else if (sendChoice.equals("2") || sendChoice.equalsIgnoreCase("Disregard Message")) {
 
+                        disregardedMessages.add(message);
+
+                    } else if (sendChoice.equals("3") || sendChoice.equalsIgnoreCase("Store Message")) {
+
+                        storedMessages.add(message);
                         message.storeMessage();
-
                     }
                 }
 

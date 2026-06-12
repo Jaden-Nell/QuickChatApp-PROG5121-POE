@@ -11,7 +11,7 @@ public class Main {
     public static void main(String[] args) {
 
         Scanner input = new Scanner(System.in);
-        Login registeredUser = null; // Stores user after successful registration
+        Login registeredUser = null;
 
         System.out.println("Welcome to QuickChat");
         System.out.println("1. Register");
@@ -167,7 +167,20 @@ public class Main {
 
             } else if (menuChoice.equals("2")) {
 
-                System.out.println("Coming Soon.");
+                if (sentMessages.isEmpty()) {
+
+                    System.out.println("No messages have been sent yet.");
+
+                } else {
+
+                    System.out.println("\n=== Sent Messages ===");
+
+                    for (Message message : sentMessages) {
+
+                        System.out.println(message.printMessageDetails());
+                        System.out.println("----------------------------------");
+                    }
+                }
 
             } else if (menuChoice.equals("3")) {
 
